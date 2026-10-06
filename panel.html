@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jira Automation</title>
+  <script src="https://miro.com/app/static/sdk/v2/miro.js"></script>
+</head>
+
+<body>
+  <h1>Jira Automation läuft 🚀</h1>
+
+  <button id="selection">Aktuelle Auswahl anzeigen</button>
+
+  <p id="result">Meine erste Miro App</p>
+
+  <script>
+    document.getElementById("selection").addEventListener("click", async () => {
+      const result = document.getElementById("result");
+      try {
+        const selection = await miro.board.getSelection();
+        const text = `${selection.length} Element(e) ausgewählt`;
+        result.textContent = text;
+        await miro.board.notifications.showInfo(text);
+      } catch (err) {
+        console.error(err);
+        result.textContent = "Fehler: Läuft die App innerhalb von Miro?";
+      }
+    });
+  </script>
+</body>
+</html>
