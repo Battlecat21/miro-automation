@@ -1,37 +1,14 @@
 <!DOCTYPE html>
 <html>
- 
 <head>
-<title>Jira Automation</title>
-<script src="https://miro.com/app2/miro.jsscript>
+  <meta charset="UTF-8">
+  <script src="https://miro.com/app/static/sdk/v2/miro.js"></script>
 </head>
- 
 <body>
- 
-<h1>Jira Automation läuft 🚀</h1>
- 
-<button id="selection">
-Aktuelle Auswahl anzeigen
-</button>
- 
-<p>Meine erste Miro App</p>
- 
-<script>
- 
-document
-.getElementById("selection")
-.addEventListener("click", async () => {
- 
-const selection =
-await miro.board.getSelection()
- 
-alert(
-`${selection.length} Elemente ausgewählt`
-)
-})
- 
-</script>
- 
+  <script>
+    miro.board.ui.on("icon:click", async () => {
+      await miro.board.ui.openPanel({ url: "panel.html" });
+    });
+  </script>
 </body>
- 
 </html>
