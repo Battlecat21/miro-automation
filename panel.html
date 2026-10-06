@@ -2,29 +2,39 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jira Automation</title>
   <script src="https://miro.com/app/static/sdk/v2/miro.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 8px; }
+    pre { white-space: pre-wrap; word-break: break-all; font-size: 11px; background: #f4f4f4; padding: 8px; }
+  </style>
 </head>
-
 <body>
-  <h1>Jira Automation läuft 🚀</h1>
-
-  <button id="selection">Aktuelle Auswahl anzeigen</button>
-
-  <p id="result">Meine erste Miro App</p>
+  <h3>Jira Automation – Diagnose</h3>
+  <button id="selection">Auswahl analysieren</button>
+  <pre id="result">Wähle eine Jira-Karte aus und klicke den Button.</pre>
 
   <script>
     document.getElementById("selection").addEventListener("click", async () => {
-      const result = document.getElementById("result");
+      const out = document.getElementById("result");
       try {
         const selection = await miro.board.getSelection();
-        const text = `${selection.length} Element(e) ausgewählt`;
-        result.textContent = text;
-        await miro.board.notifications.showInfo(text);
+        if (selection.length === 0) {
+          out.textContent = "Nichts ausgewählt.";
+          return;
+        }
+        const infos = [];
+        for (const item of selection) {
+          let frameTitle = null;
+          if (item.parentId) {
+            const parent = await miro.board.getById(item.parentId);
+            frameTitle = parent.title ?? null;
+          }
+          infos.push({ frameTitle, item });
+        }
+        out.textContent = JSON.stringify(infos, null, 2);
       } catch (err) {
-        console.error(err);
-        result.textContent = "Fehler: Läuft die App innerhalb von Miro?";
+        out.textContent = "Fehler: " + err.message;
       }
     });
   </script>
